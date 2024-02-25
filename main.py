@@ -63,13 +63,13 @@ def sendMM(url, text):
 
 if __name__ == "__main__":
     index = 0
+    url, ver = getLatestVersion()
     for instance in INSTANCES:
         index += 1
         print('Checking instance: ' + instance.name)
         if not exists('lastversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
-        url, ver = getLatestVersion()
         installedversion = readLastversion(str(index))
         if (isNewer(ver, installedversion)):
             writeLastversion(str(index), ver)
