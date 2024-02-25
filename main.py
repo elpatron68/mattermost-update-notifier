@@ -90,8 +90,8 @@ def timer_thread():
             logging.info('Message sent: ' + str(result))
         else:
             logging.info('Nothing to do (instance is up-to-date).')
-        logging.info('Sleeping for 1 hour...')
-        time.sleep(3600) # Warte 1 Stunde
+    logging.info('Sleeping for 1 hour...')
+    time.sleep(3600) # Warte 1 Stunde
 
 if __name__ == "__main__":
     logging.basicConfig(
