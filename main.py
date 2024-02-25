@@ -41,6 +41,8 @@ def getLatestVersion():
     return downloadUrl, version
 
 def readLastversion(enum):
+    # Alternativ: Versionsabfrage via API
+    # https://forum.mattermost.com/t/how-to-get-mattermost-version-via-rest-api/15022
     filename = 'lastversion{enum}.txt'.format(enum = enum)
     with open(filename, 'r') as file:
         result = file.read().rstrip()
