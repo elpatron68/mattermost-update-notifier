@@ -4,19 +4,28 @@ import threading
 import time
 import requests
 import logging
+import json
 from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
 
-class INSTANCE():
-    def __init__(self, name, url, channel):
-        self.name = name
-        self.url = url
-        self.channel = channel
+# class INSTANCE():
+#     def __init__(self, name, url, channel):
+#         self.name = name
+#         self.url = url
+#         self.channel = channel
 
-INSTANCES = []
-INSTANCES.append(INSTANCE('medisoft', 'https://mattermost.medisoftware.org/hooks/t9yywpo8db8pdrog9xrigayyuh', ''))
-INSTANCES.append(INSTANCE('joerg', 'https://s16.jl.sb/hooks/ijdhxb3ertbhtc1qr6ak9tzojr',''))
+# INSTANCES = []
+# INSTANCES.append(INSTANCE('medisoft', 'https://mattermost.medisoftware.org/hooks/t9yywpo8db8pdrog9xrigayyuh', ''))
+# INSTANCES.append(INSTANCE('joerg', 'https://s16.jl.sb/hooks/ijdhxb3ertbhtc1qr6ak9tzojr',''))
+
+def readinstances():
+    f = open('instances.json')
+    data = json.load(f)
+    # for i in data:
+    #     print(i['name'])
+    return data
+
 
 def getLatestVersion():
     downloadUrl = ""
@@ -72,9 +81,11 @@ def main():
 def timer_thread():
     index = 0
     url, ver = getLatestVersion()
-    for instance in INSTANCES:
+    instances = readinstances()
+    
+    for instance in instances:
         index += 1
-        logging.info('Checking instance: ' + instance.name)
+        logging.info('Checking instance: ' + instance['name'])
         if not exists('lastversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
@@ -86,7 +97,7 @@ def timer_thread():
             logging.info('Latest version: ' + ver)
             logging.info('Download URL:   ' + url)
             text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedversion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
-            result = sendMM(url=instance.url, text=text)
+            result = sendMM(url=instance['url'], text=text)
             logging.info('Message sent: ' + str(result))
         else:
             logging.info('Nothing to do (instance is up-to-date).')
