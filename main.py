@@ -1,13 +1,15 @@
 #!/bin/python3
 import re
-# from urllib import response
+import threading
+import time
 import requests
+import logging
 from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
 
 class INSTANCE():
-    def __init__(self, name, url, channel, lfdnr):
+    def __init__(self, name, url, channel):
         self.name = name
         self.url = url
         self.channel = channel
@@ -63,25 +65,38 @@ def sendMM(url, text):
     response = requests.post(url, headers=headers, data=values)
     return response.status_code
 
-if __name__ == "__main__":
+def main():
+    thread = threading.Thread(target=timer_thread)
+    thread.start()
+    
+def timer_thread():
     index = 0
     url, ver = getLatestVersion()
     for instance in INSTANCES:
         index += 1
-        print('Checking instance: ' + instance.name)
+        logging.info('Checking instance: ' + instance.name)
         if not exists('lastversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
         installedversion = readLastversion(str(index))
         if (isNewer(ver, installedversion)):
             writeLastversion(str(index), ver)
-            print('New Mattermost version found, information updated:')
-            print('Former version: ' + installedversion)
-            print('Latest version: ' + ver)
-            print('Download URL:   ' + url)
+            logging.info('New Mattermost version found, information updated:')
+            logging.info('Former version: ' + installedversion)
+            logging.info('Latest version: ' + ver)
+            logging.info('Download URL:   ' + url)
             text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedversion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
             result = sendMM(url=instance.url, text=text)
-            print('Message sent: ' + str(result))
-            print()
+            logging.info('Message sent: ' + str(result))
         else:
-            print('Nothing to do (instance is up-to-date).')
+            logging.info('Nothing to do (instance is up-to-date).')
+        logging.info('Sleeping for 1 hour...')
+        time.sleep(3600) # Warte 1 Stunde
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        format = '%(asctime)s %(levelname)-8s %(message)s',
+        level = logging.INFO,
+        datefmt = '%Y-%m-%d %H:%M:%S')
+    logging.info('Starting Mattermost update checker')
+    main()
