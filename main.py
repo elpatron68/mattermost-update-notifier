@@ -9,23 +9,12 @@ from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
 
-# class INSTANCE():
-#     def __init__(self, name, url, channel):
-#         self.name = name
-#         self.url = url
-#         self.channel = channel
-
-# INSTANCES = []
-# INSTANCES.append(INSTANCE('medisoft', 'https://mattermost.medisoftware.org/hooks/t9yywpo8db8pdrog9xrigayyuh', ''))
-# INSTANCES.append(INSTANCE('joerg', 'https://s16.jl.sb/hooks/ijdhxb3ertbhtc1qr6ak9tzojr',''))
-
 def readinstances():
     f = open('instances.json')
     data = json.load(f)
     # for i in data:
     #     print(i['name'])
     return data
-
 
 def getLatestVersion():
     downloadUrl = ""
