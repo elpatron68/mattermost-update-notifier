@@ -23,6 +23,15 @@ def readinstances():
         exit(1)
     return data
 
+def getInstanceVersion(apiUrl):
+    try:
+        response = requests.get(apiUrl)
+        data = response.json()
+        version = data['Version']
+    except:
+        logging.warning('❌ failed to read instance version from api.')
+    return version
+
 def getLatestVersion():
     downloadUrl = ""
 
@@ -52,7 +61,7 @@ def getLatestVersion():
 def readLastversion(enum):
     # Alternativ: Versionsabfrage via API
     # https://forum.mattermost.com/t/how-to-get-mattermost-version-via-rest-api/15022
-    filename = './data/lastversion{enum}.txt'.format(enum = enum)
+    filename = './data/lastnotifiedversion{enum}.txt'.format(enum = enum)
     try:
         with open(filename, 'r') as file:
             result = file.read().rstrip()
@@ -61,7 +70,7 @@ def readLastversion(enum):
     return result
 
 def writeLastversion(enum, version):
-    filename = './data/lastversion{enum}.txt'.format(enum = enum)
+    filename = './data/lastnotifiedversion{enum}.txt'.format(enum = enum)
     try:
         with open(filename, 'w') as file:
             file.write(version)
@@ -75,7 +84,10 @@ def sendMM(url, text):
     headers = {'Content-Type': 'application/json',}
     # values = '{ "channel": "' + CHANNEL + '", "text": "' + text + '"}'
     values = '{ "text": "' + text + '"}'
-    response = requests.post(url, headers=headers, data=values)
+    try:
+        response = requests.post(url, headers=headers, data=values)
+    except:
+        logging.warn("⚠️ Failed to send Mattermost notification.")
     return response.status_code
 
 def main():
@@ -91,23 +103,28 @@ def timer_thread():
     
     for instance in instances:
         index += 1
+        
         logging.info('Checking instance: ' + instance['name'])
+        installedVersion = getInstanceVersion(instance['api'])
         
         # Create new file if not exists
-        if not exists('./data/lastversion' + str(index) + '.txt'):
+        if not exists('./data/lastnotifiedversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
-        installedversion = readLastversion(str(index))
-        logging.info('Last version notified: ' + installedversion)
-        if (isNewer(ver, installedversion)):
-            writeLastversion(str(index), ver)
+        notifiedversion = readLastversion(str(index))
+        logging.info('Last version notified: ' + installedVersion)
+        if (isNewer(ver, installedVersion)):
             logging.info('New Mattermost version found, information updated:')
-            logging.info('Former version: ' + installedversion)
+            logging.info('Former version: ' + installedVersion)
             logging.info('Latest version: ' + ver)
             logging.info('Download URL:   ' + url)
-            text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedversion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
-            result = sendMM(url=instance['url'], text=text)
-            logging.info('Message sent: ' + str(result))
+            if isNewer(ver, notifiedversion):
+                text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
+                result = sendMM(url=instance['url'], text=text)
+                writeLastversion(str(index), ver)
+                logging.info('Message sent: ' + str(result))
+            else:
+                logging.info('Update available, but user has been notified, yet.')
         else:
             logging.info('Nothing to do (instance is up-to-date).')
     logging.info('Sleeping for 1 hour...')
