@@ -112,7 +112,7 @@ def timer_thread():
             writeLastversion(str(index), '0.0.0')
 
         notifiedversion = readLastversion(str(index))
-        logging.info('Last version notified: ' + installedVersion)
+        logging.info('Last version notified about: ' + installedVersion)
         if (isNewer(ver, installedVersion)):
             logging.info('New Mattermost version found, information updated:')
             logging.info('Former version: ' + installedVersion)
