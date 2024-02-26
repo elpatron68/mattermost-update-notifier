@@ -10,10 +10,17 @@ from requests_html import HTMLSession
 from packaging import version
 
 def readinstances():
-    f = open('./data/instances.json')
+    try:
+        f = open('./data/instances.json')
+    except:
+        logging.warning('❌ Failed to read instances from file: ./data/instances.json')
+        exit(1)
     data = json.load(f)
-    # for i in data:
-    #     print(i['name'])
+    if data:
+        logging.debug('✅ Instances loaded.')
+    else:
+        logging.warning('❌ Empty or malformatted instances file: ./data/instances.json')
+        exit(1)
     return data
 
 def getLatestVersion():
@@ -31,27 +38,35 @@ def getLatestVersion():
     try:
         downloadUrl = re.findall(regex, htmlPageText)[0]
     except:
+        logging.warning('⚠️ Failed parsing Mattermost download url.')
         pass
 
     try:
         version = re.findall(r'\d+\.\d+\.\d+', downloadUrl)[0]
     except:
+        logging.warning('⚠️ Failed parsing Mattermost version information.')
         pass
-
+    logging.info('Latest Mattermost version from releases.mattermost.com: ' + version)
     return downloadUrl, version
 
 def readLastversion(enum):
     # Alternativ: Versionsabfrage via API
     # https://forum.mattermost.com/t/how-to-get-mattermost-version-via-rest-api/15022
     filename = './data/lastversion{enum}.txt'.format(enum = enum)
-    with open(filename, 'r') as file:
-        result = file.read().rstrip()
+    try:
+        with open(filename, 'r') as file:
+            result = file.read().rstrip()
+    except:
+        logging.warning('⚠️ Failed to read file: ' + filename)
     return result
 
 def writeLastversion(enum, version):
     filename = './data/lastversion{enum}.txt'.format(enum = enum)
-    with open(filename, 'w') as file:
-        file.write(version)
+    try:
+        with open(filename, 'w') as file:
+            file.write(version)
+    except:
+        logging.warning('⚠️ Failed to write file: ' + filename)
 
 def isNewer(latestVersion, lastVerion):
     return version.parse(latestVersion) > version.parse(lastVerion)
@@ -69,16 +84,21 @@ def main():
     
 def timer_thread():
     index = 0
+    logging.info('Parsing Mattermost website for latest version and download link.')
     url, ver = getLatestVersion()
+    logging.info('Reading instances from configuration file.')
     instances = readinstances()
     
     for instance in instances:
         index += 1
         logging.info('Checking instance: ' + instance['name'])
+        
+        # Create new file if not exists
         if not exists('./data/lastversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
         installedversion = readLastversion(str(index))
+        logging.info('Last version notified: ' + installedversion)
         if (isNewer(ver, installedversion)):
             writeLastversion(str(index), ver)
             logging.info('New Mattermost version found, information updated:')
@@ -93,7 +113,7 @@ def timer_thread():
     logging.info('Sleeping for 1 hour...')
     time.sleep(3600) # Warte 1 Stunde
 
-if __name__ == "__main__":
+if __name__ == "__main__":       
     logging.basicConfig(
         format = '%(asctime)s %(levelname)-8s %(message)s',
         level = logging.INFO,
