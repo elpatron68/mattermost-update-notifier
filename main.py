@@ -10,7 +10,7 @@ from requests_html import HTMLSession
 from packaging import version
 
 def readinstances():
-    f = open('instances.json')
+    f = open('./data/instances.json')
     data = json.load(f)
     # for i in data:
     #     print(i['name'])
@@ -43,13 +43,13 @@ def getLatestVersion():
 def readLastversion(enum):
     # Alternativ: Versionsabfrage via API
     # https://forum.mattermost.com/t/how-to-get-mattermost-version-via-rest-api/15022
-    filename = 'lastversion{enum}.txt'.format(enum = enum)
+    filename = './data/lastversion{enum}.txt'.format(enum = enum)
     with open(filename, 'r') as file:
         result = file.read().rstrip()
     return result
 
 def writeLastversion(enum, version):
-    filename = 'lastversion{enum}.txt'.format(enum = enum)
+    filename = './data/lastversion{enum}.txt'.format(enum = enum)
     with open(filename, 'w') as file:
         file.write(version)
 
@@ -75,7 +75,7 @@ def timer_thread():
     for instance in instances:
         index += 1
         logging.info('Checking instance: ' + instance['name'])
-        if not exists('lastversion' + str(index) + '.txt'):
+        if not exists('./data/lastversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
         installedversion = readLastversion(str(index))
