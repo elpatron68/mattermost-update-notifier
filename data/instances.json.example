@@ -1,0 +1,12 @@
+[
+    {
+        "name": "<Name of instance #1>",
+        "url": "<Webhook url #1>",
+        "channel": "<optional>"
+    },
+    {
+        "name": "<Name of instance #1>",
+        "url": "<Webhook url #1>",
+        "channel": "<optional>"
+    }
+]
