@@ -106,18 +106,19 @@ def timer_thread():
         
         logging.info('Checking instance: ' + instance['name'])
         installedVersion = getInstanceVersion(instance['api'])
+        logging.info('Installed Mattermost version: ' + installedVersion)
         
         # Create new file if not exists
         if not exists('./data/lastnotifiedversion' + str(index) + '.txt'):
             writeLastversion(str(index), '0.0.0')
 
-        notifiedversion = readLastversion(str(index))
-        logging.info('Last version notified about: ' + installedVersion)
         if (isNewer(ver, installedVersion)):
             logging.info('New Mattermost version found, information updated:')
             logging.info('Former version: ' + installedVersion)
             logging.info('Latest version: ' + ver)
             logging.info('Download URL:   ' + url)
+            notifiedversion = readLastversion(str(index))
+            logging.info('Last version notified about: ' + installedVersion)
             if isNewer(ver, notifiedversion):
                 text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
                 result = sendMM(url=instance['url'], text=text)
