@@ -5,9 +5,12 @@ import time
 import requests
 import logging
 import json
+import os
 from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
+
+INTERVAL = os.environ['CHECKINVERVAL']
 
 def readinstances():
     try:
@@ -124,13 +127,12 @@ def timer_thread():
                 logging.info('Update available, but user has been notified, yet.')
         else:
             logging.info('Nothing to do (instance is up-to-date).')
-    logging.info('Sleeping for 1 hour...')
-    # time.sleep(3600) # Warte 1 Stunde
+    logging.info('Sleeping for ' + str(round(INTERVAL/60)) + ' minutes...')
     return
 
 def CheckForUpdate(scheduler): 
     # schedule the next call first
-    scheduler.enter(360, 1, CheckForUpdate, (scheduler,))
+    scheduler.enter(INTERVAL, 1, CheckForUpdate, (scheduler,))
     logging.info("Scheduler: Starting update check...")
     timer_thread()
 
@@ -140,6 +142,9 @@ if __name__ == "__main__":
         level = logging.INFO,
         datefmt = '%Y-%m-%d %H:%M:%S')
     logging.info('Starting Mattermost update checker')
+    if not INTERVAL:
+        INTERVAL=3600
+    logging.info('Set check interval to ' + INTERVAL + ' seconds')
     my_scheduler = sched.scheduler(time.time, time.sleep)
     my_scheduler.enter(60, 1, CheckForUpdate, (my_scheduler,))
     my_scheduler.run()
