@@ -10,7 +10,7 @@ from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
 
-INTERVAL = os.environ['CHECKINVERVAL']
+INTERVAL = int(os.environ['CHECKINVERVAL'])
 
 def readinstances():
     try:
@@ -143,8 +143,8 @@ if __name__ == "__main__":
         datefmt = '%Y-%m-%d %H:%M:%S')
     logging.info('Starting Mattermost update checker')
     if not INTERVAL:
-        INTERVAL=3600
-    logging.info('Set check interval to ' + INTERVAL + ' seconds')
+        INTERVAL = 3600
+    logging.info('Set check interval to ' + str(INTERVAL) + ' seconds')
     my_scheduler = sched.scheduler(time.time, time.sleep)
     my_scheduler.enter(INTERVAL, 1, CheckForUpdate, (my_scheduler,))
     my_scheduler.run()
