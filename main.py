@@ -146,5 +146,5 @@ if __name__ == "__main__":
         INTERVAL=3600
     logging.info('Set check interval to ' + INTERVAL + ' seconds')
     my_scheduler = sched.scheduler(time.time, time.sleep)
-    my_scheduler.enter(60, 1, CheckForUpdate, (my_scheduler,))
+    my_scheduler.enter(INTERVAL, 1, CheckForUpdate, (my_scheduler,))
     my_scheduler.run()
