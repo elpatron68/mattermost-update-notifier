@@ -1,6 +1,6 @@
 #!/bin/python3
 import re
-import threading
+import sched, time
 import time
 import requests
 import logging
@@ -89,10 +89,6 @@ def sendMM(url, text):
     except:
         logging.warn("⚠️ Failed to send Mattermost notification.")
     return response.status_code
-
-def main():
-    thread = threading.Thread(target=timer_thread)
-    thread.start()
     
 def timer_thread():
     index = 0
@@ -129,12 +125,21 @@ def timer_thread():
         else:
             logging.info('Nothing to do (instance is up-to-date).')
     logging.info('Sleeping for 1 hour...')
-    time.sleep(3600) # Warte 1 Stunde
+    # time.sleep(3600) # Warte 1 Stunde
+    return
 
-if __name__ == "__main__":       
+def CheckForUpdate(scheduler): 
+    # schedule the next call first
+    scheduler.enter(3600, 1, CheckForUpdate, (scheduler,))
+    logging.info("Scheduler: Starting update check...")
+    timer_thread()
+
+if __name__ == "__main__":
     logging.basicConfig(
         format = '%(asctime)s %(levelname)-8s %(message)s',
         level = logging.INFO,
         datefmt = '%Y-%m-%d %H:%M:%S')
     logging.info('Starting Mattermost update checker')
-    main()
+    my_scheduler = sched.scheduler(time.time, time.sleep)
+    my_scheduler.enter(60, 1, CheckForUpdate, (my_scheduler,))
+    my_scheduler.run()
