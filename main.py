@@ -130,7 +130,7 @@ def timer_thread():
 
 def CheckForUpdate(scheduler): 
     # schedule the next call first
-    scheduler.enter(3600, 1, CheckForUpdate, (scheduler,))
+    scheduler.enter(360, 1, CheckForUpdate, (scheduler,))
     logging.info("Scheduler: Starting update check...")
     timer_thread()
 
