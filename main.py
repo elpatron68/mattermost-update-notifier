@@ -32,15 +32,19 @@ def getInstanceVersion(apiUrl):
         data = response.json()
         version = data['Version']
     except:
-        logging.warning('❌ failed to read instance version from api.')
+        logging.warning('❌ Failed to read instance version from api.')
     return version
 
 def getLatestVersion():
     downloadUrl = ""
 
     session = HTMLSession()
-    r = session.get('https://docs.mattermost.com/install/install-tar.html')
-    htmlPageText=r.text
+    try:
+        r = session.get('https://docs.mattermost.com/install/install-tar.html')
+        htmlPageText=r.text
+    except:
+        logging.warn('❌ Failed to get latest version from Mattermost website')
+        pass
 
     # https://releases.mattermost.com/7.10.0/mattermost-7.10.0-linux-amd64.tar.gz
     regex = r'https:\/\/releases\.mattermost\.com\/\d+\.\d+\.\d+\/mattermost-\d+\.\d+\.\d+-linux-amd64\.tar\.gz'
@@ -97,38 +101,39 @@ def timer_thread():
     index = 0
     logging.info('Parsing Mattermost website for latest version and download link.')
     url, ver = getLatestVersion()
-    logging.info('Reading instances from configuration file.')
-    instances = readinstances()
-    
-    for instance in instances:
-        index += 1
+    if not ver == '' or url == '':
+        logging.info('Reading instances from configuration file.')
+        instances = readinstances()
         
-        logging.info('Checking instance: ' + instance['name'])
-        installedVersion = getInstanceVersion(instance['api'])
-        logging.info('Installed Mattermost version: ' + installedVersion)
-        
-        # Create new file if not exists
-        if not exists('./data/lastnotifiedversion' + str(index) + '.txt'):
-            writeLastversion(str(index), '0.0.0')
+        for instance in instances:
+            index += 1
+            
+            logging.info('Checking instance: ' + instance['name'])
+            installedVersion = getInstanceVersion(instance['api'])
+            logging.info('Installed Mattermost version: ' + installedVersion)
+            
+            # Create new file if not exists
+            if not exists('./data/lastnotifiedversion' + str(index) + '.txt'):
+                writeLastversion(str(index), '0.0.0')
 
-        if (isNewer(ver, installedVersion)):
-            logging.info('New Mattermost version found, information updated:')
-            logging.info('Former version: ' + installedVersion)
-            logging.info('Latest version: ' + ver)
-            logging.info('Download URL:   ' + url)
-            notifiedversion = readLastversion(str(index))
-            logging.info('Last version notified about: ' + installedVersion)
-            if isNewer(ver, notifiedversion):
-                text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
-                result = sendMM(url=instance['url'], text=text)
-                writeLastversion(str(index), ver)
-                logging.info('Message sent: ' + str(result))
+            if (isNewer(ver, installedVersion)):
+                logging.info('New Mattermost version found, information updated:')
+                logging.info('Former version: ' + installedVersion)
+                logging.info('Latest version: ' + ver)
+                logging.info('Download URL:   ' + url)
+                notifiedversion = readLastversion(str(index))
+                logging.info('Last version notified about: ' + installedVersion)
+                if isNewer(ver, notifiedversion):
+                    text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
+                    result = sendMM(url=instance['url'], text=text)
+                    writeLastversion(str(index), ver)
+                    logging.info('Message sent: ' + str(result))
+                else:
+                    logging.info('Update available, but user has been notified, yet.')
             else:
-                logging.info('Update available, but user has been notified, yet.')
-        else:
-            logging.info('Nothing to do (instance is up-to-date).')
-    logging.info('Sleeping for ' + str(round(INTERVAL/60)) + ' minutes...')
-    return
+                logging.info('Nothing to do (instance is up-to-date).')
+        logging.info('Sleeping for ' + str(round(INTERVAL/60)) + ' minutes...')
+        return
 
 def CheckForUpdate(scheduler): 
     # schedule the next call first
