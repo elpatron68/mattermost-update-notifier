@@ -10,7 +10,10 @@ from os.path import exists
 from requests_html import HTMLSession
 from packaging import version
 
-INTERVAL = int(os.environ['CHECKINVERVAL'])
+try:
+    INTERVAL = int(os.environ['CHECKINVERVAL']) 
+except:
+    INTERVAL = 1800
 
 def readinstances():
     try:
@@ -40,7 +43,7 @@ def getLatestVersion():
 
     session = HTMLSession()
     try:
-        r = session.get('https://docs.mattermost.com/install/install-tar.html')
+        r = session.get('https://docs.mattermost.com/deploy/server/linux/deploy-tar.html')
         htmlPageText=r.text
     except:
         logging.warning('❌ Failed to get latest version from Mattermost website')
