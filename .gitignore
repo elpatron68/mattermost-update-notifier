@@ -2,3 +2,4 @@
 lastnotifiedversion*.txt
 instances.json
 test*.*
+*.txt
