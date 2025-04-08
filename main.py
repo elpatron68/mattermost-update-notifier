@@ -43,7 +43,7 @@ def getLatestVersion():
         r = session.get('https://docs.mattermost.com/install/install-tar.html')
         htmlPageText=r.text
     except:
-        logging.warn('❌ Failed to get latest version from Mattermost website')
+        logging.warning('❌ Failed to get latest version from Mattermost website')
         pass
 
     # https://releases.mattermost.com/7.10.0/mattermost-7.10.0-linux-amd64.tar.gz
@@ -94,7 +94,7 @@ def sendMM(url, text):
     try:
         response = requests.post(url, headers=headers, data=values)
     except:
-        logging.warn("⚠️ Failed to send Mattermost notification.")
+        logging.warning("⚠️ Failed to send Mattermost notification.")
     return response.status_code
     
 def timer_thread():
