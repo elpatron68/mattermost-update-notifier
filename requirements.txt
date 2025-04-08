@@ -1,3 +1,4 @@
 packaging
 lxml
 requests-html
+lxml[html_clean]

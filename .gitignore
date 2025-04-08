@@ -1,3 +1,4 @@
 .venv
-lastversion*.txt
+lastnotifiedversion*.txt
 instances.json
+test*.*
