@@ -127,7 +127,7 @@ def timer_thread():
                 notifiedversion = readLastversion(str(index))
                 logging.info('Last version notified about: ' + installedVersion)
                 if isNewer(ver, notifiedversion):
-                    text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/install/self-managed-changelog.html)\n'
+                    text = 'New Mattermost version found!\nLatest version: ' + ver + '\nFormer version: ' + installedVersion + '\nDownload URL: ' + url + '\n[Release notes](https://docs.mattermost.com/about/mattermost-v10-changelog.html)\n'
                     result = sendMM(url=instance['url'], text=text)
                     writeLastversion(str(index), ver)
                     logging.info('Message sent: ' + str(result))
