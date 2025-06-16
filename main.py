@@ -43,14 +43,14 @@ def getLatestVersion():
 
     session = HTMLSession()
     try:
-        r = session.get('https://docs.mattermost.com/deploy/server/linux/deploy-tar.html')
+        r = session.get('https://releases.mattermost.com')
         htmlPageText=r.text
     except:
         logging.warning('❌ Failed to get latest version from Mattermost website')
         pass
 
-    # https://releases.mattermost.com/7.10.0/mattermost-7.10.0-linux-amd64.tar.gz
-    regex = r'https:\/\/releases\.mattermost\.com\/\d+\.\d+\.\d+\/mattermost-\d+\.\d+\.\d+-linux-amd64\.tar\.gz'
+    # https://releases.mattermost.com/10.9.0/mattermost-team-10.9.0-linux-amd64.tar.gz
+    regex = r'https:\/\/releases\.mattermost\.com\/\d+\.\d+\.\d+\/mattermost-team-\d+\.\d+\.\d+-linux-amd64\.tar\.gz'
     downloadUrl = ''
     version = ''
 
