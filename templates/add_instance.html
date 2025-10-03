@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Instanz hinzufügen - Mattermost Update Notifier{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-plus"></i> Neue Mattermost-Instanz hinzufügen</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Instanz-Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                               placeholder="z.B. medisoftware">
+                        <div class="form-text">Eindeutiger Name zur Identifikation der Instanz</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="api_url" class="form-label">API URL *</label>
+                        <input type="url" class="form-control" id="api_url" name="api_url" required
+                               placeholder="https://your-mattermost.com/api/v4/config/client?format=old">
+                        <div class="form-text">URL zum Abrufen der Mattermost-Version</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="webhook_url" class="form-label">Webhook URL *</label>
+                        <input type="url" class="form-control" id="webhook_url" name="webhook_url" required
+                               placeholder="https://your-mattermost.com/hooks/your-webhook-id">
+                        <div class="form-text">Incoming Webhook URL für Benachrichtigungen</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="channel" class="form-label">Channel (optional)</label>
+                        <input type="text" class="form-control" id="channel" name="channel"
+                               placeholder="z.B. updates">
+                        <div class="form-text">Channel für Update-Benachrichtigungen (leer = Standard-Channel)</div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('instances') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> Zurück
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Instanz hinzufügen
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6><i class="fas fa-info-circle"></i> Hilfe</h6>
+            </div>
+            <div class="card-body">
+                <h6>API URL finden:</h6>
+                <p>Die API URL ist normalerweise: <code>https://your-domain.com/api/v4/config/client?format=old</code></p>
+                
+                <h6>Webhook URL erstellen:</h6>
+                <ol>
+                    <li>Gehen Sie zu Ihrem Mattermost → System Console → Integrations</li>
+                    <li>Aktivieren Sie "Enable Incoming Webhooks"</li>
+                    <li>Gehen Sie zu einem Channel → Channel Info → Integrations</li>
+                    <li>Klicken Sie auf "Incoming Webhooks" → "Add Incoming Webhook"</li>
+                    <li>Kopieren Sie die generierte Webhook-URL</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mattermost-update-notifier:
+    build: .
+    container_name: mattermost-update-notifier
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-5000}:5000"
+    volumes:
+      - ./data:/app/data
+      - ./config.env:/app/config.env:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - webapp
+
+  webapp:
+    build: .
+    container_name: mattermost-update-notifier-webapp
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-5000}:${WEB_PORT:-5000}"
+    volumes:
+      - ./data:/app/data
+      - ./config.env:/app/config.env:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python webapp.py
+
+  # Optional: Separate service for the main update checker
+  update-checker:
+    build: .
+    container_name: mattermost-update-checker
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./config.env:/app/config.env:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python main.py
+    profiles:
+      - checker  # Use 'docker-compose --profile checker up' to run this service

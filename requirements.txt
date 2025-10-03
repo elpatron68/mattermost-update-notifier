@@ -2,3 +2,5 @@ packaging
 lxml
 requests-html
 lxml[html_clean]
+flask
+python-dotenv

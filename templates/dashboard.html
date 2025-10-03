@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Mattermost Update Notifier{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+    <div>
+        <button class="btn btn-outline-primary" onclick="refreshStatus()">
+            <i class="fas fa-sync-alt"></i> Aktualisieren
+        </button>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-server fa-2x text-primary mb-2"></i>
+                <h5 class="card-title">Instanzen</h5>
+                <h3 class="text-primary">{{ instances|length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <h5 class="card-title">Online</h5>
+                <h3 class="text-success">{{ instances|selectattr('status', 'equalto', 'online')|list|length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                <h5 class="card-title">Updates verfügbar</h5>
+                <h3 class="text-warning">{{ instances|selectattr('needs_update', 'equalto', true)|list|length }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if latest_version %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i>
+    <strong>Aktuelle Mattermost Version:</strong> {{ latest_version }}
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Instanz-Status</h5>
+            </div>
+            <div class="card-body">
+                {% if instances %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Version</th>
+                                    <th>Update verfügbar</th>
+                                    <th>Webhook</th>
+                                    <th>Channel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for instance in instances %}
+                                <tr class="{% if instance.needs_update %}update-available{% endif %}">
+                                    <td>
+                                        <strong>{{ instance.name }}</strong>
+                                    </td>
+                                    <td>
+                                        {% if instance.status == 'online' %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle"></i> Online
+                                            </span>
+                                        {% elif instance.status == 'offline' %}
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times-circle"></i> Offline
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-exclamation-triangle"></i> Fehler
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if instance.version %}
+                                            <span class="badge bg-secondary version-badge">{{ instance.version }}</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if instance.needs_update %}
+                                            <span class="badge bg-warning">
+                                                <i class="fas fa-arrow-up"></i> Ja
+                                            </span>
+                                        {% elif instance.status == 'online' %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Nein
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ instance.webhook[:50] }}{% if instance.webhook|length > 50 %}...{% endif %}</small>
+                                    </td>
+                                    <td>
+                                        {% if instance.channel %}
+                                            <span class="badge bg-info">{{ instance.channel }}</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% if instance.error %}
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="alert alert-warning alert-sm mb-0">
+                                            <small><i class="fas fa-exclamation-triangle"></i> {{ instance.error }}</small>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-server fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Keine Instanzen konfiguriert</h5>
+                        <p class="text-muted">Fügen Sie Ihre erste Mattermost-Instanz hinzu.</p>
+                        <a href="{{ url_for('add_instance') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Instanz hinzufügen
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function refreshStatus() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aktualisiere...';
+    button.disabled = true;
+    
+    fetch('/api/status')
+        .then(response => response.json())
+        .then(data => {
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            button.innerHTML = originalText;
+            button.disabled = false;
+            alert('Fehler beim Aktualisieren der Status');
+        });
+}
+
+// Auto-refresh every 30 seconds
+setInterval(function() {
+    fetch('/api/status')
+        .then(response => response.json())
+        .then(data => {
+            // Update status indicators without full page reload
+            console.log('Status updated:', data);
+        })
+        .catch(error => {
+            console.error('Auto-refresh error:', error);
+        });
+}, 30000);
+</script>
+{% endblock %}
