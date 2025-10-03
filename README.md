@@ -1,51 +1,54 @@
 # Mattermost Update Notifier
 
-Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interface.
+An automatic update notifier for Mattermost instances with web admin interface.
+
+**[🇩🇪 German Version](README_de.md)**
 
 ## Features
 
-- 🔄 Automatische Überprüfung auf Mattermost-Updates
-- 🌐 Web-Admin-Interface für Instanz-Verwaltung
-- 📊 Dashboard mit Status-Übersicht
-- 🔐 Passwort-basierte Authentifizierung
-- 🐳 Docker-Support mit docker compose
-- 📱 Responsive Design
+- 🔄 Automatic Mattermost update checking
+- 🌐 Web admin interface for instance management
+- 📊 Dashboard with status overview
+- 🔐 Password-based authentication
+- 🐳 Docker support with docker compose
+- 📱 Responsive design
+- 🌍 Multi-language support (German/English)
 
 ## Installation
 
-### Voraussetzungen
+### Prerequisites
 
-- Docker und Docker Compose
-- Mindestens eine Mattermost-Instanz mit API-Zugang
-- Incoming Webhook für Benachrichtigungen
+- Docker and Docker Compose
+- At least one Mattermost instance with API access
+- Incoming webhook for notifications
 
-### Schnellstart
+### Quick Start
 
-1. **Repository klonen:**
+1. **Clone repository:**
    ```bash
    git clone <repository-url>
    cd mm_update-notifier
    ```
 
-2. **Konfiguration anpassen:**
+2. **Configure settings:**
    ```bash
    cp config.env.example config.env
-   # Bearbeiten Sie config.env mit Ihren Einstellungen
+   # Edit config.env with your settings
    ```
 
-3. **Services starten:**
+3. **Start services:**
    ```bash
-   # Nur Web-Interface starten
+   # Start web interface only
    docker compose up webapp
 
-   # Oder alle Services (Web-Interface + Update-Checker)
+   # Or all services (web interface + update checker)
    docker compose --profile checker up
    ```
 
-4. **Web-Interface öffnen:**
-   Öffnen Sie http://localhost:5000 in Ihrem Browser
+4. **Open web interface:**
+   Open http://localhost:5000 in your browser
 
-## Konfiguration
+## Configuration
 
 ### config.env
 
@@ -58,85 +61,85 @@ ADMIN_PASSWORD=admin123
 CHECK_INTERVAL=1800
 ```
 
-### Instanzen hinzufügen
+### Adding Instances
 
-1. Melden Sie sich im Web-Interface an
-2. Gehen Sie zu "Instanzen" → "Neue Instanz"
-3. Füllen Sie die Felder aus:
-   - **Name:** Eindeutiger Name für die Instanz
+1. Log in to the web interface
+2. Go to "Instances" → "New Instance"
+3. Fill in the fields:
+   - **Name:** Unique name for the instance
    - **API URL:** `https://your-domain.com/api/v4/config/client?format=old`
-   - **Webhook URL:** Incoming Webhook URL aus Mattermost
-   - **Channel:** (Optional) Spezifischer Channel für Benachrichtigungen
+   - **Webhook URL:** Incoming webhook URL from Mattermost
+   - **Channel:** (Optional) Specific channel for notifications
 
-### Webhook in Mattermost einrichten
+### Setting up Webhook in Mattermost
 
-1. Gehen Sie zu Ihrem Mattermost → System Console → Integrations
-2. Aktivieren Sie "Enable Incoming Webhooks"
-3. Gehen Sie zu einem Channel → Channel Info → Integrations
-4. Klicken Sie auf "Incoming Webhooks" → "Add Incoming Webhook"
-5. Kopieren Sie die generierte Webhook-URL
+1. Go to your Mattermost → System Console → Integrations
+2. Enable "Enable Incoming Webhooks"
+3. Go to a channel → Channel Info → Integrations
+4. Click "Incoming Webhooks" → "Add Incoming Webhook"
+5. Copy the generated webhook URL
 
 ## Docker Services
 
-### Web-Interface (Standard)
+### Web Interface (Default)
 ```bash
 docker compose up webapp
 ```
-Startet nur das Web-Admin-Interface.
+Starts only the web admin interface.
 
-### Update-Checker
+### Update Checker
 ```bash
 docker compose --profile checker up
 ```
-Startet sowohl das Web-Interface als auch den automatischen Update-Checker.
+Starts both the web interface and the automatic update checker.
 
 ## API Endpoints
 
 - `GET /` - Dashboard
-- `GET /instances` - Instanz-Verwaltung
-- `POST /instances/add` - Neue Instanz hinzufügen
-- `POST /instances/delete/<id>` - Instanz löschen
-- `GET /api/status` - JSON-Status aller Instanzen
+- `GET /instances` - Instance management
+- `POST /instances/add` - Add new instance
+- `POST /instances/delete/<id>` - Delete instance
+- `GET /api/status` - JSON status of all instances
 
-## Entwicklung
+## Development
 
-### Lokale Entwicklung
+### Local Development
 
-1. **Virtual Environment erstellen:**
+1. **Create virtual environment:**
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # Linux/Mac
    .venv\Scripts\activate     # Windows
    ```
 
-2. **Dependencies installieren:**
+2. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Services starten:**
+3. **Start services:**
    ```bash
-   # Web-Interface
+   # Web interface
    python webapp.py
 
-   # Update-Checker
+   # Update checker
    python main.py
    ```
 
-### Projekt-Struktur
+### Project Structure
 
 ```
 mm_update-notifier/
-├── main.py              # Update-Checker Script
-├── webapp.py            # Flask Web-Interface
-├── requirements.txt     # Python Dependencies
-├── config.env          # Konfiguration
-├── docker compose.yml  # Docker Services
-├── Dockerfile          # Docker Image
-├── data/               # Datenverzeichnis
-│   ├── instances.json  # Instanz-Konfiguration
+├── main.py              # Update checker script
+├── webapp.py            # Flask web interface
+├── requirements.txt     # Python dependencies
+├── config.env          # Configuration
+├── docker-compose.yml  # Docker services
+├── Dockerfile          # Docker image
+├── data/               # Data directory
+│   ├── instances.json  # Instance configuration
 │   └── lastnotifiedversion*.txt
-└── templates/          # HTML Templates
+└── templates/          # HTML templates
     ├── base.html
     ├── login.html
     ├── dashboard.html
@@ -146,42 +149,42 @@ mm_update-notifier/
 
 ## Troubleshooting
 
-### Häufige Probleme
+### Common Issues
 
-1. **"API ist nicht erreichbar"**
-   - Überprüfen Sie die API-URL
-   - Stellen Sie sicher, dass die Mattermost-Instanz erreichbar ist
+1. **"API is not reachable"**
+   - Check the API URL
+   - Ensure the Mattermost instance is accessible
 
 2. **"Version field not found in API response"**
-   - Überprüfen Sie, ob die API-URL korrekt ist
-   - Stellen Sie sicher, dass `?format=old` Parameter enthalten ist
+   - Verify the API URL is correct
+   - Ensure the `?format=old` parameter is included
 
-3. **Webhook-Fehler**
-   - Überprüfen Sie die Webhook-URL
-   - Stellen Sie sicher, dass Incoming Webhooks aktiviert sind
+3. **Webhook errors**
+   - Check the webhook URL
+   - Ensure incoming webhooks are enabled
 
-### Logs anzeigen
+### View Logs
 
 ```bash
-# Docker Logs
+# Docker logs
 docker compose logs -f webapp
 docker compose logs -f update-checker
 
-# Lokale Logs
-# Logs werden in der Konsole angezeigt
+# Local logs
+# Logs are displayed in the console
 ```
 
-## Sicherheit
+## Security
 
-- Ändern Sie das Standard-Passwort in `config.env`
-- Verwenden Sie HTTPS in der Produktion
-- Beschränken Sie den Netzwerk-Zugang auf das Web-Interface
-- Regelmäßige Updates der Dependencies
+- Change the default password in `config.env`
+- Use HTTPS in production
+- Restrict network access to the web interface
+- Regular updates of dependencies
 
-## Lizenz
+## License
 
-[Lizenz hier einfügen]
+[Insert license here]
 
 ## Support
 
-Bei Problemen oder Fragen erstellen Sie ein Issue im Repository.
+For issues or questions, please create an issue in the repository.
