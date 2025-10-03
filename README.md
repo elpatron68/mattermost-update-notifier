@@ -39,8 +39,8 @@ An automatic update notifier for Mattermost instances with web admin interface.
 
 1. **Pull and run the image:**
    ```bash
-   # Pull the latest image
-   docker pull ghcr.io/elpatron68/mattermost-update-notifier:latest
+   # Pull the latest image (Docker Hub - No login required)
+   docker pull elpatronki/mattermost-update-notifier:latest
    
    # Run with docker compose
    docker run -d \
@@ -48,7 +48,7 @@ An automatic update notifier for Mattermost instances with web admin interface.
      -p 5000:5000 \
      -v $(pwd)/data:/app/data \
      -v $(pwd)/config.env:/app/config.env \
-     ghcr.io/elpatron68/mattermost-update-notifier:latest
+     elpatronki/mattermost-update-notifier:latest
    ```
 
 2. **Open web interface:**

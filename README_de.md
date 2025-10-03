@@ -35,10 +35,31 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 
 ### Schnellstart
 
+#### Option 1: Vorgefertigtes Docker-Image verwenden (Empfohlen)
+
+1. **Image pullen und ausführen:**
+   ```bash
+   # Neuestes Image pullen (Docker Hub - Kein Login erforderlich)
+   docker pull elpatronki/mattermost-update-notifier:latest
+   
+   # Container starten
+   docker run -d \
+     --name mattermost-update-notifier \
+     -p 5000:5000 \
+     -v $(pwd)/data:/app/data \
+     -v $(pwd)/config.env:/app/config.env \
+     elpatronki/mattermost-update-notifier:latest
+   ```
+
+2. **Web-Interface öffnen:**
+   Öffnen Sie http://localhost:5000 in Ihrem Browser
+
+#### Option 2: Aus Quellcode erstellen
+
 1. **Repository klonen:**
    ```bash
-   git clone <repository-url>
-   cd mm_update-notifier
+   git clone https://github.com/elpatron68/mattermost-update-notifier.git
+   cd mattermost-update-notifier
    ```
 
 2. **Konfiguration anpassen:**
@@ -91,6 +112,14 @@ CHECK_INTERVAL=1800
 5. Kopieren Sie die generierte Webhook-URL
 
 ## Docker Services
+
+### Vorgefertigtes Image (Empfohlen)
+```bash
+# Docker Hub Image verwenden
+docker run -d --name mattermost-update-notifier -p 5000:5000 \
+  -v $(pwd)/data:/app/data -v $(pwd)/config.env:/app/config.env \
+  elpatronki/mattermost-update-notifier:latest
+```
 
 ### Web-Interface (Standard)
 ```bash
