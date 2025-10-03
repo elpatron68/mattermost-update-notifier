@@ -35,10 +35,31 @@ An automatic update notifier for Mattermost instances with web admin interface.
 
 ### Quick Start
 
+#### Option 1: Using Pre-built Docker Image (Recommended)
+
+1. **Pull and run the image:**
+   ```bash
+   # Pull the latest image
+   docker pull ghcr.io/elpatron68/mattermost-update-notifier:latest
+   
+   # Run with docker compose
+   docker run -d \
+     --name mattermost-update-notifier \
+     -p 5000:5000 \
+     -v $(pwd)/data:/app/data \
+     -v $(pwd)/config.env:/app/config.env \
+     ghcr.io/elpatron68/mattermost-update-notifier:latest
+   ```
+
+2. **Open web interface:**
+   Open http://localhost:5000 in your browser
+
+#### Option 2: Build from Source
+
 1. **Clone repository:**
    ```bash
-   git clone <repository-url>
-   cd mm_update-notifier
+   git clone https://github.com/elpatron68/mattermost-update-notifier.git
+   cd mattermost-update-notifier
    ```
 
 2. **Configure settings:**
