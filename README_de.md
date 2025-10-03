@@ -182,7 +182,7 @@ docker compose logs -f update-checker
 
 ## Lizenz
 
-[Lizenz hier einfügen]
+Dieses Projekt steht unter der MIT-Lizenz - siehe die [LICENSE](LICENSE) Datei für Details.
 
 ## Support
 
