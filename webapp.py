@@ -9,7 +9,7 @@ import logging
 import requests
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from flask_babel import Babel, gettext as _, ngettext, lazy_gettext
+# Removed Flask-Babel import due to compatibility issues
 from dotenv import load_dotenv
 from packaging import version
 
@@ -24,23 +24,98 @@ WEB_PORT = int(os.environ.get('WEB_PORT', 5000))
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 INSTANCES_FILE = './data/instances.json'
 
-# Internationalization Configuration
-app.config['LANGUAGES'] = {
+# Language Configuration
+LANGUAGES = {
     'en': 'English',
     'de': 'Deutsch'
 }
-app.config['BABEL_DEFAULT_LOCALE'] = 'de'
-app.config['BABEL_DEFAULT_TIMEZONE'] = 'Europe/Berlin'
 
-babel = Babel(app)
-
-@babel.localeselector
-def get_locale():
+# Simple language support without Flask-Babel for now
+def get_current_language():
     return request.args.get('lang', session.get('language', 'de'))
 
-@babel.timezoneselector
-def get_timezone():
-    return 'Europe/Berlin'
+def translate_text(text, lang=None):
+    """Simple translation function"""
+    if lang is None:
+        lang = get_current_language()
+    
+    # Simple German translations
+    translations = {
+        'de': {
+            'Dashboard': 'Dashboard',
+            'Instances': 'Instanzen', 
+            'Logout': 'Abmelden',
+            'Admin Login': 'Admin-Anmeldung',
+            'Password': 'Passwort',
+            'Login': 'Anmelden',
+            'Successfully logged in!': 'Erfolgreich angemeldet!',
+            'Invalid password!': 'Ungültiges Passwort!',
+            'Successfully logged out!': 'Erfolgreich abgemeldet!',
+            'Language changed to %(lang)s': 'Sprache geändert zu %(lang)s',
+            'Refresh': 'Aktualisieren',
+            'Online': 'Online',
+            'Updates Available': 'Updates verfügbar',
+            'Update Available': 'Update verfügbar',
+            'Instance Status': 'Instanz-Status',
+            'Instance Management': 'Instanz-Verwaltung',
+            'New Instance': 'Neue Instanz',
+            'Configured Instances': 'Konfigurierte Instanzen',
+            'Name': 'Name',
+            'API URL': 'API URL',
+            'Webhook URL': 'Webhook URL',
+            'Channel': 'Channel',
+            'Actions': 'Aktionen',
+            'Edit': 'Bearbeiten',
+            'Delete': 'Löschen',
+            'No instances configured': 'Keine Instanzen konfiguriert',
+            'Add your first Mattermost instance.': 'Fügen Sie Ihre erste Mattermost-Instanz hinzu.',
+            'Add Instance': 'Instanz hinzufügen',
+            'Delete Instance': 'Instanz löschen',
+            'Are you sure you want to delete the instance': 'Sind Sie sicher, dass Sie die Instanz',
+            'This action cannot be undone.': 'Diese Aktion kann nicht rückgängig gemacht werden.',
+            'Cancel': 'Abbrechen',
+        },
+        'en': {
+            'Dashboard': 'Dashboard',
+            'Instances': 'Instances',
+            'Logout': 'Logout', 
+            'Admin Login': 'Admin Login',
+            'Password': 'Password',
+            'Login': 'Login',
+            'Successfully logged in!': 'Successfully logged in!',
+            'Invalid password!': 'Invalid password!',
+            'Successfully logged out!': 'Successfully logged out!',
+            'Language changed to %(lang)s': 'Language changed to %(lang)s',
+            'Refresh': 'Refresh',
+            'Online': 'Online',
+            'Updates Available': 'Updates Available',
+            'Update Available': 'Update Available',
+            'Instance Status': 'Instance Status',
+            'Instance Management': 'Instance Management',
+            'New Instance': 'New Instance',
+            'Configured Instances': 'Configured Instances',
+            'Name': 'Name',
+            'API URL': 'API URL',
+            'Webhook URL': 'Webhook URL',
+            'Channel': 'Channel',
+            'Actions': 'Actions',
+            'Edit': 'Edit',
+            'Delete': 'Delete',
+            'No instances configured': 'No instances configured',
+            'Add your first Mattermost instance.': 'Add your first Mattermost instance.',
+            'Add Instance': 'Add Instance',
+            'Delete Instance': 'Delete Instance',
+            'Are you sure you want to delete the instance': 'Are you sure you want to delete the instance',
+            'This action cannot be undone.': 'This action cannot be undone.',
+            'Cancel': 'Cancel',
+        }
+    }
+    
+    return translations.get(lang, {}).get(text, text)
+
+# Mock _ function for templates
+def _(text):
+    return translate_text(text)
 
 # Configure logging
 logging.basicConfig(
@@ -200,9 +275,9 @@ def logout():
 @app.route('/set_language/<language>')
 def set_language(language):
     """Set language preference"""
-    if language in app.config['LANGUAGES']:
+    if language in LANGUAGES:
         session['language'] = language
-        flash(_('Language changed to %(lang)s', lang=app.config['LANGUAGES'][language]), 'success')
+        flash(_('Language changed to %(lang)s') % {'lang': LANGUAGES[language]}, 'success')
     return redirect(request.referrer or url_for('index'))
 
 @app.route('/instances')
@@ -348,6 +423,9 @@ def api_status():
         'latest_version': latest_version,
         'timestamp': datetime.now().isoformat()
     })
+
+# Make translation function available in templates
+app.jinja_env.globals.update(_=_)
 
 if __name__ == '__main__':
     # Ensure data directory exists

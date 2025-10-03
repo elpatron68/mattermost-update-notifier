@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Instanzen - Mattermost Update Notifier{% endblock %}
+{% block title %}{{ _('Instances') }} - Mattermost Update Notifier{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="fas fa-server"></i> Instanz-Verwaltung</h1>
+    <h1><i class="fas fa-server"></i> {{ _('Instance Management') }}</h1>
     <a href="{{ url_for('add_instance') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Neue Instanz
+        <i class="fas fa-plus"></i> {{ _('New Instance') }}
     </a>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h5><i class="fas fa-list"></i> Konfigurierte Instanzen</h5>
+        <h5><i class="fas fa-list"></i> {{ _('Configured Instances') }}</h5>
     </div>
     <div class="card-body">
         {% if instances %}
@@ -20,11 +20,11 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>API URL</th>
-                            <th>Webhook URL</th>
-                            <th>Channel</th>
-                            <th>Aktionen</th>
+                            <th>{{ _('Name') }}</th>
+                            <th>{{ _('API URL') }}</th>
+                            <th>{{ _('Webhook URL') }}</th>
+                            <th>{{ _('Channel') }}</th>
+                            <th>{{ _('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,10 +48,10 @@
                             </td>
                             <td>
                                 <a href="{{ url_for('edit_instance', index=loop.index0) }}" class="btn btn-sm btn-primary me-2">
-                                    <i class="fas fa-edit"></i> Bearbeiten
+                                    <i class="fas fa-edit"></i> {{ _('Edit') }}
                                 </a>
                                 <button class="btn btn-sm btn-danger" onclick="deleteInstance({{ loop.index0 }}, '{{ instance.name }}')">
-                                    <i class="fas fa-trash"></i> Löschen
+                                    <i class="fas fa-trash"></i> {{ _('Delete') }}
                                 </button>
                             </td>
                         </tr>
@@ -62,10 +62,10 @@
         {% else %}
             <div class="text-center py-4">
                 <i class="fas fa-server fa-3x text-muted mb-3"></i>
-                <h5 class="text-muted">Keine Instanzen konfiguriert</h5>
-                <p class="text-muted">Fügen Sie Ihre erste Mattermost-Instanz hinzu.</p>
+                <h5 class="text-muted">{{ _('No instances configured') }}</h5>
+                <p class="text-muted">{{ _('Add your first Mattermost instance.') }}</p>
                 <a href="{{ url_for('add_instance') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Instanz hinzufügen
+                    <i class="fas fa-plus"></i> {{ _('Add Instance') }}
                 </a>
             </div>
         {% endif %}
@@ -77,16 +77,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Instanz löschen</h5>
+                <h5 class="modal-title">{{ _('Delete Instance') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Sind Sie sicher, dass Sie die Instanz "<span id="instanceName"></span>" löschen möchten?</p>
-                <p class="text-danger"><small>Diese Aktion kann nicht rückgängig gemacht werden.</small></p>
+                <p>{{ _('Are you sure you want to delete the instance') }} "<span id="instanceName"></span>"?</p>
+                <p class="text-danger"><small>{{ _('This action cannot be undone.') }}</small></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Löschen</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">{{ _('Delete') }}</button>
             </div>
         </div>
     </div>

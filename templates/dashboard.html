@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+    <h1><i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}</h1>
     <div>
         <button class="btn btn-outline-primary" onclick="refreshStatus()">
-            <i class="fas fa-sync-alt"></i> Aktualisieren
+            <i class="fas fa-sync-alt"></i> {{ _('Refresh') }}
         </button>
     </div>
 </div>
@@ -17,7 +17,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <i class="fas fa-server fa-2x text-primary mb-2"></i>
-                <h5 class="card-title">Instanzen</h5>
+                <h5 class="card-title">{{ _('Instances') }}</h5>
                 <h3 class="text-primary">{{ instances|length }}</h3>
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                <h5 class="card-title">Online</h5>
+                <h5 class="card-title">{{ _('Online') }}</h5>
                 <h3 class="text-success">{{ instances|selectattr('status', 'equalto', 'online')|list|length }}</h3>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="card text-center">
             <div class="card-body">
                 <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
-                <h5 class="card-title">Updates verfügbar</h5>
+                <h5 class="card-title">{{ _('Updates Available') }}</h5>
                 <h3 class="text-warning">{{ instances|selectattr('needs_update', 'equalto', true)|list|length }}</h3>
             </div>
         </div>
@@ -53,7 +53,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5><i class="fas fa-list"></i> Instanz-Status</h5>
+                <h5><i class="fas fa-list"></i> {{ _('Instance Status') }}</h5>
             </div>
             <div class="card-body">
                 {% if instances %}
@@ -64,7 +64,7 @@
                                     <th>Name</th>
                                     <th>Status</th>
                                     <th>Version</th>
-                                    <th>Update verfügbar</th>
+                                    <th>{{ _('Update Available') }}</th>
                                     <th>Webhook</th>
                                     <th>Channel</th>
                                 </tr>
