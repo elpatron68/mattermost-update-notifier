@@ -16,7 +16,7 @@
                         <div class="text-center mb-4">
                             <i class="fas fa-bell fa-3x text-primary mb-3"></i>
                             <h2 class="card-title">Mattermost Update Notifier</h2>
-                            <p class="text-muted">Admin-Anmeldung</p>
+                            <p class="text-muted">{{ _('Admin Login') }}</p>
                         </div>
 
                         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -32,7 +32,7 @@
 
                         <form method="POST">
                             <div class="mb-3">
-                                <label for="password" class="form-label">Passwort</label>
+                                <label for="password" class="form-label">{{ _('Password') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text">
                                         <i class="fas fa-lock"></i>
@@ -42,7 +42,7 @@
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-sign-in-alt"></i> Anmelden
+                                    <i class="fas fa-sign-in-alt"></i> {{ _('Login') }}
                                 </button>
                             </div>
                         </form>

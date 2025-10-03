@@ -27,19 +27,28 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('index') }}">
-                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                            <i class="fas fa-tachometer-alt"></i> {{ _('Dashboard') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('instances') }}">
-                            <i class="fas fa-server"></i> Instanzen
+                            <i class="fas fa-server"></i> {{ _('Instances') }}
                         </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe"></i> {{ session.get('language', 'de').upper() }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', language='de') }}">🇩🇪 Deutsch</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', language='en') }}">🇺🇸 English</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">
-                            <i class="fas fa-sign-out-alt"></i> Abmelden
+                            <i class="fas fa-sign-out-alt"></i> {{ _('Logout') }}
                         </a>
                     </li>
                 </ul>

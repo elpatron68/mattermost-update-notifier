@@ -8,7 +8,7 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 - 🌐 Web-Admin-Interface für Instanz-Verwaltung
 - 📊 Dashboard mit Status-Übersicht
 - 🔐 Passwort-basierte Authentifizierung
-- 🐳 Docker-Support mit docker-compose
+- 🐳 Docker-Support mit docker compose
 - 📱 Responsive Design
 
 ## Installation
@@ -36,10 +36,10 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 3. **Services starten:**
    ```bash
    # Nur Web-Interface starten
-   docker-compose up webapp
+   docker compose up webapp
 
    # Oder alle Services (Web-Interface + Update-Checker)
-   docker-compose --profile checker up
+   docker compose --profile checker up
    ```
 
 4. **Web-Interface öffnen:**
@@ -80,13 +80,13 @@ CHECK_INTERVAL=1800
 
 ### Web-Interface (Standard)
 ```bash
-docker-compose up webapp
+docker compose up webapp
 ```
 Startet nur das Web-Admin-Interface.
 
 ### Update-Checker
 ```bash
-docker-compose --profile checker up
+docker compose --profile checker up
 ```
 Startet sowohl das Web-Interface als auch den automatischen Update-Checker.
 
@@ -131,7 +131,7 @@ mm_update-notifier/
 ├── webapp.py            # Flask Web-Interface
 ├── requirements.txt     # Python Dependencies
 ├── config.env          # Konfiguration
-├── docker-compose.yml  # Docker Services
+├── docker compose.yml  # Docker Services
 ├── Dockerfile          # Docker Image
 ├── data/               # Datenverzeichnis
 │   ├── instances.json  # Instanz-Konfiguration
@@ -164,8 +164,8 @@ mm_update-notifier/
 
 ```bash
 # Docker Logs
-docker-compose logs -f webapp
-docker-compose logs -f update-checker
+docker compose logs -f webapp
+docker compose logs -f update-checker
 
 # Lokale Logs
 # Logs werden in der Konsole angezeigt

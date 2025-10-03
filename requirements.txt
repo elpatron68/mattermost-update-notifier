@@ -4,3 +4,5 @@ requests-html
 lxml[html_clean]
 flask
 python-dotenv
+flask-babel
+babel

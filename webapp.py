@@ -9,6 +9,7 @@ import logging
 import requests
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask_babel import Babel, gettext as _, ngettext, lazy_gettext
 from dotenv import load_dotenv
 from packaging import version
 
@@ -22,6 +23,24 @@ app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-product
 WEB_PORT = int(os.environ.get('WEB_PORT', 5000))
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 INSTANCES_FILE = './data/instances.json'
+
+# Internationalization Configuration
+app.config['LANGUAGES'] = {
+    'en': 'English',
+    'de': 'Deutsch'
+}
+app.config['BABEL_DEFAULT_LOCALE'] = 'de'
+app.config['BABEL_DEFAULT_TIMEZONE'] = 'Europe/Berlin'
+
+babel = Babel(app)
+
+@babel.localeselector
+def get_locale():
+    return request.args.get('lang', session.get('language', 'de'))
+
+@babel.timezoneselector
+def get_timezone():
+    return 'Europe/Berlin'
 
 # Configure logging
 logging.basicConfig(
@@ -164,10 +183,10 @@ def login():
         password = request.form.get('password')
         if password == ADMIN_PASSWORD:
             session['authenticated'] = True
-            flash('Erfolgreich angemeldet!', 'success')
+            flash(_('Successfully logged in!'), 'success')
             return redirect(url_for('index'))
         else:
-            flash('Ungültiges Passwort!', 'error')
+            flash(_('Invalid password!'), 'error')
     
     return render_template('login.html')
 
@@ -175,8 +194,16 @@ def login():
 def logout():
     """Logout"""
     session.pop('authenticated', None)
-    flash('Erfolgreich abgemeldet!', 'success')
+    flash(_('Successfully logged out!'), 'success')
     return redirect(url_for('login'))
+
+@app.route('/set_language/<language>')
+def set_language(language):
+    """Set language preference"""
+    if language in app.config['LANGUAGES']:
+        session['language'] = language
+        flash(_('Language changed to %(lang)s', lang=app.config['LANGUAGES'][language]), 'success')
+    return redirect(request.referrer or url_for('index'))
 
 @app.route('/instances')
 @require_auth
