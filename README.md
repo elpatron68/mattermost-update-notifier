@@ -15,6 +15,17 @@ An automatic update notifier for Mattermost instances with web admin interface.
 - 📱 Responsive design
 - 🌍 Multi-language support (German/English)
 
+## Screenshots
+
+### Dashboard
+![Dashboard](assets/en_mattermost_update_notifier_webapp_main.png)
+
+### Instance Management
+![Instance Management](assets/en_mattermost_update_notifier_webapp_instance-management.png)
+
+### Add New Instance
+![Add New Instance](assets/en_mattermost_update_notifier_webapp_new-instance.png)
+
 ## Installation
 
 ### Prerequisites
