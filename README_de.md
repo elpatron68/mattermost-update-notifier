@@ -12,6 +12,18 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 - 🔐 Passwort-basierte Authentifizierung
 - 🐳 Docker-Support mit docker compose
 - 📱 Responsive Design
+- 🌍 Mehrsprachigkeit (Deutsch/Englisch)
+
+## Screenshots
+
+### Dashboard
+![Dashboard](assets/en_mattermost_update_notifier_webapp_main.png)
+
+### Instanz-Verwaltung
+![Instanz-Verwaltung](assets/en_mattermost_update_notifier_webapp_instance-management.png)
+
+### Neue Instanz hinzufügen
+![Neue Instanz hinzufügen](assets/en_mattermost_update_notifier_webapp_new-instance.png)
 
 ## Installation
 
