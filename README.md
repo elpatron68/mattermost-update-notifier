@@ -7,6 +7,7 @@ An automatic update notifier for Mattermost instances with web admin interface.
 ## Features
 
 - 🔄 Automatic Mattermost update checking
+- 💬 Mattermost webhook notification
 - 🌐 Web admin interface for instance management
 - 📊 Dashboard with status overview
 - 🔐 Password-based authentication

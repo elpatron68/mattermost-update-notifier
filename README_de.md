@@ -7,6 +7,7 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 ## Features
 
 - 🔄 Automatische Überprüfung auf Mattermost-Updates
+- 💬 Mattermost Webhook-Benachrichtigung
 - 🌐 Web-Admin-Interface für Instanz-Verwaltung
 - 📊 Dashboard mit Status-Übersicht
 - 🔐 Passwort-basierte Authentifizierung
