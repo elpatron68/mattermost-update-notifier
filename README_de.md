@@ -227,6 +227,15 @@ docker compose logs -f update-checker
 # Logs werden in der Konsole angezeigt
 ```
 
+### GHCR-Package finden
+
+So finden Sie das Docker-Image auf GitHub Container Registry:
+
+1. Gehen Sie zu Ihrem GitHub-Profil: **https://github.com/elpatron68**
+2. Klicken Sie auf den Tab **Packages** (neben Repositories)
+3. Klicken Sie auf **mattermost-update-notifier**
+4. Für öffentlichen Zugriff: **Package settings** (rechte Sidebar) → **Change visibility** → **Public**
+
 ## Sicherheit
 
 - Ändern Sie das Standard-Passwort in `config.env`

@@ -1,5 +1,10 @@
 FROM python:3.11-slim
 
+# Link package to GitHub repository (required for GITHUB_TOKEN push permissions)
+LABEL org.opencontainers.image.source=https://github.com/elpatron68/mattermost-update-notifier
+LABEL org.opencontainers.image.description="Mattermost Update Notifier - Web admin interface and automatic update checker"
+LABEL org.opencontainers.image.licenses=MIT
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
