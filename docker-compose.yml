@@ -27,6 +27,7 @@ services:
     command: python webapp.py
 
   # Optional: Separate service for the main update checker
+  # Use 'docker compose --profile checker up' to run this service
   update-checker:
     build: .
     container_name: mattermost-update-checker
@@ -37,3 +38,5 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     command: python main.py
+    profiles:
+      - checker

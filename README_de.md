@@ -40,7 +40,10 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
 
 1. **Image pullen und ausführen:**
    ```bash
-   # Neuestes Image pullen (Docker Hub - Kein Login erforderlich)
+   # GitHub Container Registry (ghcr.io)
+   docker pull ghcr.io/elpatron68/mattermost-update-notifier:latest
+   
+   # Oder Docker Hub
    docker pull elpatronki/mattermost-update-notifier:latest
    
    # Container starten
@@ -49,7 +52,7 @@ Ein automatischer Update-Notifier für Mattermost-Instanzen mit Web-Admin-Interf
      -p 5000:5000 \
      -v $(pwd)/data:/app/data \
      -v $(pwd)/config.env:/app/config.env \
-     elpatronki/mattermost-update-notifier:latest
+     ghcr.io/elpatron68/mattermost-update-notifier:latest
    ```
 
 2. **Web-Interface öffnen:**
@@ -111,6 +114,15 @@ CHECK_INTERVAL=1800
 3. Gehen Sie zu einem Channel → Channel Info → Integrations
 4. Klicken Sie auf "Incoming Webhooks" → "Add Incoming Webhook"
 5. Kopieren Sie die generierte Webhook-URL
+
+## Docker Images
+
+Images werden automatisch bei Push auf `main` und bei Releases veröffentlicht:
+
+| Registry | Image |
+|----------|-------|
+| **GitHub Container Registry** | `ghcr.io/elpatron68/mattermost-update-notifier` |
+| **Docker Hub** | `elpatronki/mattermost-update-notifier` |
 
 ## Docker Services
 

@@ -40,16 +40,19 @@ An automatic update notifier for Mattermost instances with web admin interface.
 
 1. **Pull and run the image:**
    ```bash
-   # Pull the latest image (Docker Hub - No login required)
+   # GitHub Container Registry (ghcr.io)
+   docker pull ghcr.io/elpatron68/mattermost-update-notifier:latest
+   
+   # Or Docker Hub
    docker pull elpatronki/mattermost-update-notifier:latest
    
-   # Run with docker compose
+   # Run with docker
    docker run -d \
      --name mattermost-update-notifier \
      -p 5000:5000 \
      -v $(pwd)/data:/app/data \
      -v $(pwd)/config.env:/app/config.env \
-     elpatronki/mattermost-update-notifier:latest
+     ghcr.io/elpatron68/mattermost-update-notifier:latest
    ```
 
 2. **Open web interface:**
@@ -111,6 +114,15 @@ CHECK_INTERVAL=1800
 3. Go to a channel → Channel Info → Integrations
 4. Click "Incoming Webhooks" → "Add Incoming Webhook"
 5. Copy the generated webhook URL
+
+## Docker Images
+
+Images are published automatically on push to `main` and on releases:
+
+| Registry | Image |
+|----------|-------|
+| **GitHub Container Registry** | `ghcr.io/elpatron68/mattermost-update-notifier` |
+| **Docker Hub** | `elpatronki/mattermost-update-notifier` |
 
 ## Docker Services
 
