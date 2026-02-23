@@ -228,6 +228,16 @@ To find and manage the Docker image on GitHub Container Registry:
 3. Click **mattermost-update-notifier**
 4. To make it public: **Package settings** (right sidebar) → **Change visibility** → **Public**
 
+### 403 Forbidden when pushing to GHCR
+
+If the workflow fails with `403 Forbidden` when pushing to ghcr.io, the package exists but is not linked to the repository:
+
+1. Go to **https://github.com/elpatron68** → **Packages** → **mattermost-update-notifier**
+2. Click **Package settings** (right sidebar)
+3. Under **Manage Actions access**, click **Add repository**
+4. Select **elpatron68/mattermost-update-notifier** and grant **Admin** or **Write** access
+5. Re-run the workflow
+
 ## Security
 
 - Change the default password in `config.env`
