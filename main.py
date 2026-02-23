@@ -178,12 +178,10 @@ def sendMM(url, text):
         logging.warning(f'❌ Invalid text provided for notification: {text}')
         return None
     
-    headers = {'Content-Type': 'application/json',}
-    # Escape special characters in text to prevent JSON injection
-    escaped_text = text.replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
-    values = '{ "text": "' + escaped_text + '"}'
+    headers = {'Content-Type': 'application/json'}
+    payload = {'text': text}
     try:
-        response = requests.post(url, headers=headers, data=values, timeout=30)
+        response = requests.post(url, headers=headers, data=json.dumps(payload), timeout=30)
         response.raise_for_status()
         return response.status_code
     except requests.exceptions.RequestException as e:

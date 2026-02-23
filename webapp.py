@@ -91,6 +91,8 @@ def translate_text(text, lang=None):
             'Go to a channel → Channel Info → Integrations': 'Gehen Sie zu einem Channel → Channel Info → Integrations',
             'Click "Incoming Webhooks" → "Add Incoming Webhook"': 'Klicken Sie auf "Incoming Webhooks" → "Add Incoming Webhook"',
             'Copy the generated webhook URL': 'Kopieren Sie die generierte Webhook-URL',
+            'Update check completed. Notifications have been sent.': 'Update-Prüfung durchgeführt. Benachrichtigungen wurden gesendet.',
+            'Check Updates & Notify': 'Updates prüfen & Benachrichtigen',
         },
         'en': {
             'Dashboard': 'Dashboard',
@@ -142,6 +144,8 @@ def translate_text(text, lang=None):
             'Go to a channel → Channel Info → Integrations': 'Go to a channel → Channel Info → Integrations',
             'Click "Incoming Webhooks" → "Add Incoming Webhook"': 'Click "Incoming Webhooks" → "Add Incoming Webhook"',
             'Copy the generated webhook URL': 'Copy the generated webhook URL',
+            'Update check completed. Notifications have been sent.': 'Update check completed. Notifications have been sent.',
+            'Check Updates & Notify': 'Check Updates & Notify',
         }
     }
     
@@ -434,6 +438,20 @@ def delete_instance(index):
         flash('Ungültige Instanz!', 'error')
     
     return redirect(url_for('instances'))
+
+@app.route('/api/check-updates', methods=['POST'])
+@require_auth
+def trigger_update_check():
+    """Manually trigger update check and send Mattermost notifications"""
+    try:
+        from main import timer_thread
+        timer_thread()
+        flash(_('Update check completed. Notifications have been sent.'), 'success')
+        return redirect(url_for('index'))
+    except Exception as e:
+        logging.error(f'Error during manual update check: {e}')
+        flash(f'Fehler bei der Update-Prüfung: {str(e)}', 'error')
+        return redirect(url_for('index'))
 
 @app.route('/api/status')
 @require_auth

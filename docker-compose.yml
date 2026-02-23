@@ -37,5 +37,3 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     command: python main.py
-    profiles:
-      - checker  # Use 'docker-compose --profile checker up' to run this service
